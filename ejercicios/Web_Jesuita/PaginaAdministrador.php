@@ -1,5 +1,5 @@
 <!doctype html>
-    <html lang="es">
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <title>Inicio Sesion</title>
@@ -184,14 +184,14 @@
                                 if (!isset($_GET["opcionusuario"]))
                                 {
                                     echo '<h2>Gestion de Usuario</h2>';
-                                    echo '<div class="opciones">';
-                                    echo '<ul>';
-                                    echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=agregar">Agregar</a></li>';
-                                    echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=modificar">Modificar</a></li>';
-                                    echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=eliminar">Eliminar</a></li>';
-                                    echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=listar">Listar</a></li>';
-                                    echo '</ul>';
-                                    echo '</div>';
+                                        echo '<div class="opciones">';
+                                            echo '<ul>';
+                                                echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=agregar">Agregar</a></li>';
+                                                echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=modificar">Modificar</a></li>';
+                                                echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=eliminar">Eliminar</a></li>';
+                                                echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=listar">Listar</a></li>';
+                                            echo '</ul>';
+                                        echo '</div>';
                                     echo '<button class="volver"><a href="PaginaAdministrador.php">Volver</a></button>';
                                 }
                                 else
@@ -455,48 +455,13 @@
                                             if ($_GET["opcionusuario"] == "eliminar")
                                             {
                                                 echo '<h2>Eliminar Usuario</h2>';
-                                                if (!isset($_POST["Eliminar"]))
-                                                {
-                                                    echo '<form action="" METHOD="POST">';
-                                                        echo '<input type="text" placeholder="Ip de la Maquina " name="ip">';
+                                                echo '<form action="eliminar-usuario.php" METHOD="POST">';
+                                                    echo '<input type="text" placeholder="Ip de la Maquina " name="ip">';
 
-                                                        echo '<input type="submit" value="Eliminar" name="Eliminar">';
-                                                    echo '</form>';
+                                                    echo '<input type="submit" value="Eliminar" name="Eliminar">';
+                                                echo '</form>';
 
-                                                    echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
-                                                }
-                                                else
-                                                {
-                                                    if(!isset($_POST["confirmacion"]))
-                                                    {
-                                                        echo '<form action="" METHOD="POST">';
-                                                            echo '<label class="centrar2">Seguro que quieres eliminar el usuario?</label>';
-                                                            echo '<label class="centrar2">'.$_POST["ip"].'</label>';
-
-                                                            echo '<input type="checkbox" name="confirmacion" value="SI">Si';
-                                                            echo '<input type="checkbox" name="confirmacion" value="No">No';
-
-
-                                                            echo '</br><input type="submit" value="Enviar" name="enviar"/>';
-                                                        echo '</form>';
-                                                    }
-                                                    else
-                                                    {
-                                                        if($_POST["confirmacion"]=='SI')
-                                                        {
-                                                            echo 'hola';
-                                                            echo $_POST["ip"];
-                                                        }
-                                                        if($_POST["confirmacion"]=='NO')
-                                                        {
-                                                            echo 'adios';
-                                                        }
-                                                    }
-
-                                                    echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario&eliminar">Volver</a></button>';
-
-
-                                                }
+                                                echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
                                             }
                                             else
                                             {
