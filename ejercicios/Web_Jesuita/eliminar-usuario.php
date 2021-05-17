@@ -8,7 +8,7 @@
     <body>
         <?php
             session_start();
-
+// asd
             echo '<div id="contenedor">';
                 if(!isset($_POST["confirmacion"]))
                 {
