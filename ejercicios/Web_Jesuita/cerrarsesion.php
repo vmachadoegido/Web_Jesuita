@@ -3,6 +3,6 @@
 
     session_destroy();
 
-    header('Location: InicioSesion-Administrador.php');
+    header('Location: 1-PaginaPrincipal.php');
 
 ?>
