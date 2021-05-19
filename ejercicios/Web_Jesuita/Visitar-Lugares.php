@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="general">
-            <img src="imagenes/logotipo.png"/>
+            <img src="imagenes/logotipo.png">
             <h3>JESUITAS POR EL MUNDO</h3>
             <?php
 
@@ -15,7 +15,7 @@
                 $objeto=new clasephp();
 
                 // Inicio Sesion
-                session_start();
+                //session_start();
 
                 // Pruebas
                 $_SESSION["idJesuita"] = '1';
