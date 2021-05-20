@@ -12,20 +12,20 @@
             <?php
                 // Inicia Ssion
                 session_start();
-                // Traer los metodos de la pagina clasephp.php
-                require_once 'clasephp.php';
-                // Crear el objeto de la clasephp.
-                $objeto=new clasephp();
+                // Traer los metodos de la pagina operaciones.php
+                require_once 'operaciones.php';
+                // Crear el objeto de la operaciones.
+                $objeto=new operaciones();
 
 /* Navegador --------------------------------------------------------------------------------------------------*/
                 echo '<nav>';
                     echo '<ul>';
-                        // Si no existe la session usuario mostra enn el menu Inicio Sesion
-                        if(isset($_SESSION["usuario"]))
+                        // Si esta vacio la session usuario mostra enn el menu Inicio Sesion
+                        if(empty($_SESSION["usuario"]))
                         {
                             echo '<li><a href="inicio-sesion.php">Inicio Sesion</a></li>';
                         }
-                        else // SI existe la sesion usuario mostra sus opciones
+                        else // Si esta vacio la sesion usuario mostra sus opciones
                         {
                             // Si el usuario es admin o usuario mostra el boton perfil
                             if( ($_SESSION["usuario"] == 'admin') or ($_SESSION["usuario"] == 'usuario'))
@@ -62,7 +62,7 @@
             echo '<div>';
                 echo '<h2>Ranking 5 Lugares Mas Visitados</h2>';
                 // Si devuelve filas, existe esos datos
-                if ($objeto->comprobarSelect()>0)
+                if ($objeto->comprobarFila()>0)
                 {
                     echo '<table>';
                         echo '<tr>';
@@ -88,13 +88,13 @@
 /* 5 jesuitas mas viajeros -----------------------------------------------------------*/
 
             /* Consulta para mostrar los 5 jesuitas con mas visitas*/
-            $sql="SELECT visitas.idJesuita, maquina.jesuita, COUNT(*) AS visitas FROM visitas INNER JOIN maquina ON visitas.idJesuita=maquina.ip GROUP BY idJesuita ORDER BY COUNT(*) DESC LIMIT 5";
+            $sql="SELECT visita.idJesuita, maquina.jesuita, COUNT(*) AS visitas FROM visita INNER JOIN maquina ON visita.idJesuita=maquina.ip GROUP BY idJesuita ORDER BY COUNT(*) DESC LIMIT 5";
             $objeto->realizarConsultas($sql);
 
             echo '<div>';
                 echo '<h2>Ranking 5 Jesuitas Mas Viajeros</h2>';
                 // SI devuelve filas, por lo tanto hay jesuitas visitando
-                if ($objeto->comprobar()>0)
+                if ($objeto->comprobarFila()>0)
                 {
                     echo '<table>';
                         echo '<tr>';
@@ -122,7 +122,7 @@
             echo '<div>';
                 echo '<h2>Ultimas 5 Visitas</h2>';
                 // COmprueba que devuelve filas, por lo tanto hay visitas
-                if ($objeto->comprobar()>0)
+                if ($objeto->comprobarFila()>0)
                 {
                     echo '<div id="ultimasVisitas">';
                     // Muestra los jesuitas, lugares y la hora de la visita.
