@@ -137,37 +137,6 @@
                     echo' No hay ultimas visitas';
                 }
             echo '</div>';
-
-/* Ultima visita echa por ti ------------------------------------------------------------------------------------------ */
-                // Ver sus ultimas tres visitas.
-                // Si eres usuario
-                if(!empty($_SESSION["usuario"]))
-                {
-                    // Si eres perfil usuario
-                    if($_SESSION["usuario"] == 'usuario')
-                    {
-                        echo '<h2>Ultimas Visita Tuyas</h2>';
-                        // SI no existe la cookie lugares_visitados, mostrara un mensaje
-                        if(!isset($_COOKIE['lugares_visitados']))
-                        {
-                            echo '<td>Aun no has visitado ningun lugar</td>';
-                        }
-                        else // Si existe la cookie lugares_visitados mostra lo guardado en esta
-                        {
-                            echo '<table>';
-                                echo '<tr>';
-                                    echo '<td>'.$_COOKIE['lugares_visitados'].'</td>';
-//                                    echo '<th>Lugares</th>';
-                                    // Recorre toda la array de la cookie lugares_visitados
-//                                    foreach($_COOKIE['lugares_visitados'] as $lugar)
-//                                    {
-//                                        echo '<td>'.$lugar.'</td>';
-//                                    }
-                                echo '</tr>';
-                            echo '</table>';
-                        }
-                    }
-                }
             ?>
         </div>
     </body>

@@ -160,7 +160,11 @@ nav ul li a{
     margin-bottom: 40px;
 }
 
-
+#agregarmasinfo
+{
+    text-align: center;
+    border: 0;
+}
 
 
 /*-------------------------------------------------------------------*/

@@ -35,5 +35,14 @@
         {
             return $this->resultado->fetch_array();
         }
+
+        // Funcion que retorna la ultima id de la ultima consulta
+        function ultimoid()
+        {
+            return $this->mysqli->insert_id;
+        }
+
+
+
     }
 ?>

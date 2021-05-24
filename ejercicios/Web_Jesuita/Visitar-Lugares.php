@@ -53,9 +53,9 @@
                         }
                     echo '</div>';
 
-                    echo $_COOKIE['lugares_visitados'][0].'-0</br>';
-                    echo $_COOKIE['lugares_visitados'][1].'-1</br>';
-                    echo $_COOKIE['lugares_visitados'][2].'-2</br>';
+//                    echo $_COOKIE['lugares_visitados'][0].'-0</br>';
+//                    echo $_COOKIE['lugares_visitados'][1].'-1</br>';
+//                    echo $_COOKIE['lugares_visitados'][2].'-2</br>';
 
 
 
