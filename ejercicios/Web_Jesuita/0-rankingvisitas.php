@@ -17,6 +17,7 @@
                 // Crear el objeto de la operaciones.
                 $objeto=new operaciones();
 
+
 /* Navegador --------------------------------------------------------------------------------------------------*/
                 echo '<nav>';
                     echo '<ul>';

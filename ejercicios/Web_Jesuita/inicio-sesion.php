@@ -7,8 +7,6 @@
     </head>
     <body>
         <?php
-            session_start();
-
             echo '<div id="contenedor">';
                 if(!isset($_POST["Enviar"]))
                 {
@@ -21,24 +19,119 @@
                 }
                 else
                 {
-                    // Finje ser admin aunque no tendria que estar aqui
-                    if($_POST["usuario"]=='admin')
-                    {
-                        $_SESSION["usuario"]= 'admin';
-                        header('Location: 0-rankingvisitas.php');
-                    }
+                    // Inicia Sesion
+                    session_start();
 
-                    // Finje ser usuario, tendria que comprobar la base de datos.
-                    if($_POST["usuario"]=='usuario')
+                    // Traer los metodos de la pagina operaciones.php
+                    require_once 'operaciones.php';
+
+                    // Crear el objeto de la operaciones.
+                    $objeto = new operaciones();
+
+                    // Guardar los datos del formulario en variables.
+                    $usuario = $_POST["usuario"];
+                    $password = $_POST["password"];
+
+                    // Si esta vacio el usuario
+                    if(empty($usuario))
                     {
-                        $_SESSION["usuario"]= 'usuario';
-                        header('Location: 0-rankingvisitas.php');
+                        echo '<p class="centrarvisita">No pusiste el usuario </p>';
+                        echo '<a href="inicio-sesion.php" class="boton"> Volver </br></a>';
                     }
+                    else
+                    {
+                        // Analizar la consulta y guardarla
+                        $consultar = $objeto->conexion()->prepare("SELECT * FROM maquina WHERE ip=? AND password=?");
+                        // Preparar la consulta
+                        $consultar->bind_param("ss", $usuario, $password);
+                        // Ejecutar la consulta
+                        $consultar->execute();
+                        // Devuelve el resultado de la consulta
+                        $resultado = $consultar->get_result();
+
+                        // Si el numero de filas es mas de 0, significa que devolvio filas la consulta.
+                        // Por lo tanto es correcto los datos introducidos
+                        if ($resultado->num_rows > 0)
+                        {
+                            // echo 'Correcto';
+                            // Recorrer las filas de la consulta
+                            $fila = $resultado->fetch_assoc();
+
+                            // Guardar las variables
+                            $_SESSION["ip"] = $fila["ip"];
+                            $_SESSION["jesuita"] = $fila["jesuita"];
+                            $_SESSION["usuario"] = 'usuario';
+
+//                            // Si es la primera vez,de su inicio cambie la contraseña
+//                            if($fila["primera_vez"] == 0)
+//                            {
+//                                // Default 0 - true es primera vez
+//                            }
+//                            else
+//                            {
+//                                // 1 - false NO es la primera vez
+//                            }
+
+                            header('Location: 0-rankingvisitas.php');
+                        }
+                        else
+                        {
+                            echo '<p class="centrarvisita">El usuario o contraseña son incorrecto</p>';
+                            echo '<a href="inicio-sesion.php" class="boton"> Volver </br></a>';
+                        }
+
+                    }
+/*- Encriptacion -------------------------------------------------------------------------------------*/
+/*
+                        // Analizar la consulta y guardarla
+                        $consultar = $objeto->conexion()->prepare("SELECT * FROM maquina WHERE ip=?");
+                        // Preparar la consulta
+                        $consultar->bind_param("s", $usuario);
+                        // Ejecutar la consulta
+                        $consultar->execute();
+                        // Devuelve el resultado de la consulta
+                        $resultado = $consultar->get_result();
+
+                        // Si el numero de filas es mas de 0, significa que devolvio filas la consulta.
+                        // Por lo tanto es correcto los datos introducidos
+                        if($resultado->num_rows>0)
+                        {
+                            // Recorrer las filas de la consulta
+                            $fila= $resultado->fetch_assoc();
+
+                            // Verifica si la contraseña introducida es igual a la de la BD. QUe esta encriptada.
+                            if (password_verify($password, $fila["password"]))
+                            {
+                                // Guardar las variables
+                                $_SESSION["ip"] = $fila["ip"];
+                                $_SESSION["jesuita"] = $fila["jesuita"];
+                                $_SESSION["usuario"] = 'usuario';
+
+                                //Si es la primera vez,de su inicio cambie la contraseña
+//                                if($fila["primera_vez"] == 0)
+//                                {
+//                                    // Default 0 - true es primera vez
+//                                }
+//                                else
+//                                {
+//                                    // 1 - false NO es la primera vez
+//                                }
+                            }
+                            else // SI la contraseña no coincide
+                            {
+                                echo '<p class="centrarvisita">El usuario o contraseña son incorrecto</p>';
+                                echo '<a href="inicio-sesion.php" class="boton"> Volver </br></a>';
+                            }
+                        }
+                        else // Si el usuario no existe.
+                        {
+                            echo '<p class="centrarvisita">El usuario o contraseña son incorrecto</p>';
+                            echo '<a href="inicio-sesion.php" class="boton"> Volver </br></a>';
+                        }
+                    }
+*/
                 }
             echo '</div>';
         ?>
     </body>
 </html>
-
-
-

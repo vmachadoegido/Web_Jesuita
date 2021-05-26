@@ -47,58 +47,66 @@
                     $nombrejesuita = $_POST["nombrejesuita"];
                     $firma = $_POST["firma"];
 
-                    // Consulta para ssaber si existe ese jesuita.
-                    $consulta = "SELECT * FROM jesuita WHERE nombreJesuita='$nombrejesuita'";
-                    $objeto->realizarConsultas($consulta);
-
-                    // Si devuelve fila, significa que existe ese jesuita, por lo tanto no se guarda
-                    if ($objeto->comprobarFila()>0)
+                    if((!empty($nombrejesuita) AND (!empty($firma))))
                     {
-                        echo '<p> Error - Ese Jesuita ya existe</p>';
-                        echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
+                        // Consulta para ssaber si existe ese jesuita.
+                        $consulta = "SELECT * FROM jesuita WHERE nombreJesuita='$nombrejesuita'";
+                        $objeto->realizarConsultas($consulta);
+
+                        // Si devuelve fila, significa que existe ese jesuita, por lo tanto no se guarda
+                        if ($objeto->comprobarFila()>0)
+                        {
+                            echo '<p> Error - Ese Jesuita ya existe</p>';
+                            echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
+                        }
+                        else
+                        {
+                            // Consulta para insertar el nombre del jesuita y su firma
+                            $consulta = "INSERT INTO jesuita (nombreJesuita, firma) VALUES ('$nombrejesuita', '$firma')";
+                            $objeto->realizarConsultas($consulta);
+
+                            // Si devuelve fila se introdujo corectamente los datos.
+                            if ($objeto->comprobar()>0)
+                            {
+                                // Sacar la ultima id de la consulta, insert
+                                $id=$objeto->ultimoid();
+
+                                $consulta = "SELECT * FROM informacion_j WHERE idJesuita='$id'";
+                                $objeto->realizarConsultas($consulta);
+
+                                // Si existe esa id
+                                if ($objeto->comprobarFila()>0)
+                                {
+                                    // Pendiente de configuracion
+                                    echo '<p> No se introdujo nada... Config </p>';
+                                    echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
+                                }
+                                else
+                                {
+                                    // Introduce toda la raid.
+                                    // Recorre toda la raids, insertando la informacion en filas distintas
+                                    foreach ($_POST["info"] as $contador)
+                                    {
+                                        $consulta = "INSERT INTO informacion_j (idJesuita, infomacion) VALUES ('$id', '$contador')";
+                                        $objeto->realizarConsultas($consulta);
+                                    }
+
+                                    echo '<p>Se introdujo los datos correctamente.</p>';
+                                    echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
+                                }
+
+                            }
+                            else // Si no se introdujo bien el insert salta este error.
+                            {
+                                echo '<p> Error - Hubo un error inesperado</p>';
+                                echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
+                            }
+                        }
                     }
                     else
                     {
-                        // Consulta para insertar el nombre del jesuita y su firma
-                        $consulta = "INSERT INTO jesuita (nombreJesuita, firma) VALUES ('$nombrejesuita', '$firma')";
-                        $objeto->realizarConsultas($consulta);
-
-                        // Si devuelve fila se introdujo corectamente los datos.
-                        if ($objeto->comprobar()>0)
-                        {
-                            // Sacar la ultima id de la consulta, insert
-                            $id=$objeto->ultimoid();
-
-                            $consulta = "SELECT * FROM informacion_j WHERE idJesuita='$id'";
-                            $objeto->realizarConsultas($consulta);
-
-                            // Si existe esa id
-                            if ($objeto->comprobarFila()>0)
-                            {
-                                // Pendiente de configuracion
-                                echo '<p> No se introdujo nada... Config </p>';
-                                echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
-                            }
-                            else
-                            {
-                                // Introduce toda la raid.
-                                // Recorre toda la raids, insertando la informacion en filas distintas
-                                foreach ($_POST["info"] as $contador)
-                                {
-                                    $consulta = "INSERT INTO informacion_j (idJesuita, infomacion) VALUES ('$id', '$contador')";
-                                    $objeto->realizarConsultas($consulta);
-                                }
-
-                                echo '<p>Se introdujo los datos correctamente.</p>';
-                                echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
-                            }
-
-                        }
-                        else // Si no se introdujo bien el insert salta este error.
-                        {
-                            echo '<p> Error - Hubo un error inesperado</p>';
-                            echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
-                        }
+                        echo '<p> No se introdujo el jesuita y su firma</p>';
+                        echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
                     }
                 }
             ?>

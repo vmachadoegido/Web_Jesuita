@@ -12,6 +12,13 @@
             $this->mysqli = new mysqli(servidor, usuario, password, basedatos);
         }
 
+        function conexion()
+        {
+            return $this->mysqli = new mysqli(servidor, usuario, password, basedatos);
+
+        }
+
+
         // Funcion para realizar la consulta.
         function realizarConsultas($sql)
         {
