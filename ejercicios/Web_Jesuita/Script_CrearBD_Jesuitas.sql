@@ -47,7 +47,6 @@ CREATE TABLE visita(
 	FOREIGN KEY (idLugar) REFERENCES lugar(idLugar),
 	FOREIGN KEY (idJesuita) REFERENCES jesuita(idJesuita),
 	
-	CHECK(idJesuita<>idJesuita)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE informacion_J(

@@ -87,8 +87,12 @@
                                     // Recorre toda la raids, insertando la informacion en filas distintas
                                     foreach ($_POST["info"] as $contador)
                                     {
-                                        $consulta = "INSERT INTO informacion_j (idJesuita, infomacion) VALUES ('$id', '$contador')";
-                                        $objeto->realizarConsultas($consulta);
+                                        // Si contador tiene contenido
+                                        if(!empty($contador))
+                                        {
+                                            $consulta = "INSERT INTO informacion_j (idJesuita, infomacion) VALUES ('$id', '$contador')";
+                                            $objeto->realizarConsultas($consulta);
+                                        }
                                     }
 
                                     echo '<p>Se introdujo los datos correctamente.</p>';

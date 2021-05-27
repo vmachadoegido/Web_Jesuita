@@ -19,6 +19,7 @@
 
                 // Pruebas, finje ser el jesuita 1
                 $_SESSION["idJesuita"] = '1';
+                echo $_SESSION["idJesuita"];
 
 
                 // Hasta que no se envia el lugar
@@ -104,7 +105,7 @@
                     {
                         // Consulta para comprobar que esa idLugar pertenece a una maquina
                         $consulta= "SELECT * FROM maquina WHERE lugar='$lugar';";
-                        //print_r($consulta);
+                        print_r($consulta);
 
                         $objeto->realizarConsultas($consulta);
 
@@ -126,7 +127,7 @@
                             else
                             {
                                 $consulta='INSERT INTO visita (idLugar, idJesuita, fechaHora) VALUES ('.$lugar.', '.$_SESSION["idJesuita"].', now());';
-                                //print_r($consulta);
+                                print_r($consulta);
                                 $objeto->realizarConsultas($consulta);
 
                                 // Si devuelve fila la consulta, por lo tanto se pudo hacer la visita.
@@ -134,7 +135,7 @@
                                 {
                                     // Consulta del la idLugar visitado.
                                     $consulta = "SELECT * FROM lugar WHERE idLugar= $lugar";
-                                    //print_r($consulta);
+                                    print_r($consulta);
                                     $objeto->realizarConsultas($consulta);
 
                                     // Comprueba si devuelve fila la consulta, por lo tanto esa idLugar exita.
