@@ -12,12 +12,11 @@
             $this->mysqli = new mysqli(servidor, usuario, password, basedatos);
         }
 
+        // Devuelve la conexion
         function conexion()
         {
             return $this->mysqli = new mysqli(servidor, usuario, password, basedatos);
-
         }
-
 
         // Funcion para realizar la consulta.
         function realizarConsultas($sql)
@@ -49,7 +48,11 @@
             return $this->mysqli->insert_id;
         }
 
-
+        // Devuelve el numero de error
+        function error()
+        {
+            return $this->mysqli->errno;
+        }
 
     }
 ?>

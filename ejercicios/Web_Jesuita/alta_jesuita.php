@@ -47,9 +47,10 @@
                     $nombrejesuita = $_POST["nombrejesuita"];
                     $firma = $_POST["firma"];
 
+                    // Si esta relleno el nombre del jesuita y su firma
                     if((!empty($nombrejesuita) AND (!empty($firma))))
                     {
-                        // Consulta para ssaber si existe ese jesuita.
+                        // Consulta para saber si existe ese jesuita.
                         $consulta = "SELECT * FROM jesuita WHERE nombreJesuita='$nombrejesuita'";
                         $objeto->realizarConsultas($consulta);
 
@@ -71,6 +72,7 @@
                                 // Sacar la ultima id de la consulta, insert
                                 $id=$objeto->ultimoid();
 
+                                // Consulta para buscar si existe informacion de ese jesuita.
                                 $consulta = "SELECT * FROM informacion_j WHERE idJesuita='$id'";
                                 $objeto->realizarConsultas($consulta);
 
@@ -78,23 +80,23 @@
                                 if ($objeto->comprobarFila()>0)
                                 {
                                     // Pendiente de configuracion
-                                    echo '<p> No se introdujo nada... Config </p>';
+                                    echo '<p> No se introdujo ninguna informacion ya que existe ese jesuita</p>';
                                     echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
                                 }
-                                else
+                                else // Si no existe esa id
                                 {
                                     // Introduce toda la raid.
                                     // Recorre toda la raids, insertando la informacion en filas distintas
                                     foreach ($_POST["info"] as $contador)
                                     {
-                                        // Si contador tiene contenido
+                                        // Si contador tiene contenido y no esta vacio va introduciendo.
                                         if(!empty($contador))
                                         {
                                             $consulta = "INSERT INTO informacion_j (idJesuita, infomacion) VALUES ('$id', '$contador')";
                                             $objeto->realizarConsultas($consulta);
+
                                         }
                                     }
-
                                     echo '<p>Se introdujo los datos correctamente.</p>';
                                     echo '<a href="alta_jesuita.php" class="boton"> Volver </br></a>';
                                 }

@@ -33,10 +33,13 @@ CREATE TABLE maquina(
 	lugar tinyint unsigned NULL,
 	jesuita tinyint unsigned NULL,
 	
-	FOREIGN KEY (lugar) REFERENCES lugar(idLugar),
+	FOREIGN KEY (lugar) REFERENCES lugar(idLugar);
 	FOREIGN KEY (jesuita) REFERENCES jesuita(idJesuita)
 	
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+
+
 
 CREATE TABLE visita(
 	idVisita SMALLINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -44,15 +47,17 @@ CREATE TABLE visita(
 	idJesuita tinyint unsigned NOT NULL,
 	fechaHora datetime NOT NULL default NOW(),
 	
-	FOREIGN KEY (idLugar) REFERENCES lugar(idLugar),
-	FOREIGN KEY (idJesuita) REFERENCES jesuita(idJesuita),
+	FOREIGN KEY (idLugar) REFERENCES maquina(lugar) On Update Cascade On Delete Cascade,
+	FOREIGN KEY (idJesuita) REFERENCES maquina(jesuita) On Update Cascade On Delete Cascade,
 	
+	UNIQUE (idLugar, idJesuita),
+    CHECK(idLugar<>idJesuita)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE informacion_J(
 	idJesuita tinyint unsigned NOT NULL,
 	infomacion varchar(255) NOT NULL,
-	FOREIGN KEY (idJesuita) REFERENCES jesuita(idJesuita)
+	FOREIGN KEY (idJesuita) REFERENCES jesuita(idJesuita) On Update Cascade On Delete Cascade
 	
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 

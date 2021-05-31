@@ -48,7 +48,7 @@
                             // Si el usuario es admin o usuario mostra el boton salir
                             if( ($_SESSION["usuario"] == 'admin') or ($_SESSION["usuario"] == 'usuario'))
                             {
-                                echo '<li id="salir"><a href="inicio-sesion.php">Salir</a></li>';
+                                echo '<li id="salir"><a href="cerrarsesion.php">Salir</a></li>';
                             }
                         }
                     echo '</ul>';

@@ -17,9 +17,9 @@
                 // Inicio Sesion
                 session_start();
 
-                // Pruebas, finje ser el jesuita 1
-                $_SESSION["idJesuita"] = '1';
-                echo $_SESSION["idJesuita"];
+                // Pruebas, finje ser la maquina 1
+                $_SESSION["jesuita"] = '1';
+                echo $_SESSION["jesuita"];
 
 
                 // Hasta que no se envia el lugar
@@ -60,10 +60,10 @@
 
 
 
-                    /*-----------------------------------------------------------------------------------------------------*/
+/* Despegable -----------------------------------------------------------------------------------------------------*/
 
                     // Hacer la consulta de lugar ordenado por el nombre
-                    $consulta = "SELECT * FROM lugar ORDER BY nombreLugar";
+                    $consulta = "SELECT maquina.ip, maquina.jesuita, lugar.idLugar, lugar.nombreLugar FROM maquina INNER JOIN lugar ON lugar.idLugar = maquina.lugar ORDER BY lugar.nombreLugar";
 
                     $objeto->realizarConsultas($consulta);
 
@@ -105,8 +105,7 @@
                     {
                         // Consulta para comprobar que esa idLugar pertenece a una maquina
                         $consulta= "SELECT * FROM maquina WHERE lugar='$lugar';";
-                        print_r($consulta);
-
+                        //print_r($consulta);
                         $objeto->realizarConsultas($consulta);
 
                         // En caso de devolver fila, existe ese lugar que es de una maquina.
@@ -119,103 +118,97 @@
                             $jesuita = $fila["jesuita"];
 
 
-                            // Comprueba que el usuario
-                            if($fila["jesuita"] ===$_SESSION["idJesuita"])
+                            // Consulta para hacer la visita
+                            $consulta = 'INSERT INTO visita (idLugar, idJesuita, fechaHora) VALUES ('.$lugar.' , '.$_SESSION["jesuita"].', now());';
+                            //print_r($consulta);
+                            $objeto->realizarConsultas($consulta);
+
+                            // Guardo la id del error
+                            $numeroerror = $objeto->error();
+
+                            // Si esta rellena $numeroerror, significa que hubo un error al hacer la consulta. check o unique.
+                            if(!empty($numeroerror))
                             {
-                                echo '<p>Error no te puedes visitar a ti mismo</p>';
+                                // Error CONSTRAINT - Check
+                                if($numeroerror = 4025)
+                                {
+                                    echo '<p>No te puedes visitar a ti mismo</p>';
+                                }
+                                // Error - Entrada Duplicada - C.Unique
+                                if ($numeroerror = 1062)
+                                {
+                                    echo '<p>No puedes visitar esta ciudad mas veces.</p>';
+                                }
                             }
-                            else
+                            else // No hubo error
                             {
-                                $consulta='INSERT INTO visita (idLugar, idJesuita, fechaHora) VALUES ('.$lugar.', '.$_SESSION["idJesuita"].', now());';
-                                print_r($consulta);
+                                // Consulta del la idLugar visitado.
+                                $consulta = "SELECT * FROM lugar WHERE idLugar= $lugar";
+                                //print_r($consulta);
                                 $objeto->realizarConsultas($consulta);
 
-                                // Si devuelve fila la consulta, por lo tanto se pudo hacer la visita.
-                                if($objeto->comprobar()>0)
-                                {
-                                    // Consulta del la idLugar visitado.
-                                    $consulta = "SELECT * FROM lugar WHERE idLugar= $lugar";
-                                    print_r($consulta);
-                                    $objeto->realizarConsultas($consulta);
+                                // Comprueba si devuelve fila la consulta, por lo tanto esa idLugar exita.
+                                if ($objeto->comprobarFila() > 0) {
+                                    // Extraigo las filas
+                                    $fila = $objeto->extraerFilas();
+                                    // Muestra un mensaje del lugar visitado
+                                    echo '<p>Hiciste una visita a ' . $fila["nombreLugar"] . '</p>';
 
-                                    // Comprueba si devuelve fila la consulta, por lo tanto esa idLugar exita.
-                                    if($objeto->comprobarFila()>0)
+                                    // Guardo el nombre del lugar en una variable, para facilitar el codigo.
+                                    $lugarvisitado = $fila["nombreLugar"];
+
+                                    // Si esta vacio la cookie lugares_visitados[0] crea la cookie.
+                                    if (empty($_COOKIE['lugares_visitados'][0])) {
+                                        // Crea la cookie lugares_visitados[0] con el valor del lugar
+                                        setcookie('lugares_visitados[0]', $lugarvisitado, time() + 3600);
+                                    }
+                                    else // Si no esta vacia la cookie lugares_visitados[0]
                                     {
-                                        // Extraigo las filas
-                                        $fila = $objeto->extraerFilas();
-                                        // Muestra un mensaje del lugar visitado
-                                        echo '<p>Hiciste una visita a '.$fila["nombreLugar"].'</p>';
+                                        // Si esta vacio la cookie lugares_visitados[1]
+                                        if (empty($_COOKIE['lugares_visitados'][1])) {
+                                            // Guardo la cookie lugares_visitados[0] en una auxiliar
+                                            $auxiliar = $_COOKIE['lugares_visitados'][0];
 
-                                        // Guardo el nombre del lugar en una variable, para facilitar el codigo.
-                                        $lugarvisitado = $fila["nombreLugar"];
+                                            // Creo una cookie lugares_visitados[0] con el lugar visitado
+                                            setcookie('lugares_visitados[0]', $lugarvisitado, time() + 3600);
 
-                                        // Si esta vacio la cookie lugares_visitados[0] crea la cookie.
-                                        if(empty($_COOKIE['lugares_visitados'][0]))
+                                            // Creo una cookie lugares_visitados[1] con el valor del auxiliar
+                                            setcookie('lugares_visitados[1]', $auxiliar, time() + 3600);
+
+                                        } else // Si no esta vacio lugares_visitados[1]
                                         {
-                                            // Crea la cookie lugares_visitados[0] con el valor del lugar
-                                            setcookie('lugares_visitados[0]', $lugarvisitado , time()+3600);
-                                        }
-                                        else // Si no esta vacia la cookie lugares_visitados[0]
-                                        {
-                                            // Si esta vacio la cookie lugares_visitados[1]
-                                            if(empty($_COOKIE['lugares_visitados'][1]))
-                                            {
+                                            // Si esta vacio la cookie lugares_visitados[2]
+                                            if (empty($_COOKIE['lugares_visitados'][2])) {
                                                 // Guardo la cookie lugares_visitados[0] en una auxiliar
-                                                $auxiliar=$_COOKIE['lugares_visitados'][0];
+                                                $auxiliar1 = $_COOKIE['lugares_visitados'][0];
+                                                $auxiliar2 = $_COOKIE['lugares_visitados'][1];
 
-                                                // Creo una cookie lugares_visitados[0] con el lugar visitado
-                                                setcookie('lugares_visitados[0]', $lugarvisitado , time()+3600);
+                                                // Creo una cookie lugares_visitados[2] con el valor del auxiliar
+                                                setcookie('lugares_visitados[2]', $auxiliar2, time() + 3600);
 
                                                 // Creo una cookie lugares_visitados[1] con el valor del auxiliar
-                                                setcookie('lugares_visitados[1]', $auxiliar , time()+3600);
+                                                setcookie('lugares_visitados[1]', $auxiliar1, time() + 3600);
 
-                                            }
-                                            else // Si no esta vacio lugares_visitados[1]
+                                                // Creo una cookie lugares_visitados[0] con el lugar visitado
+                                                setcookie('lugares_visitados[0]', $lugarvisitado, time() + 3600);
+                                            } else // Si esta rellena lugares_visitados[2]
                                             {
-                                                // Si esta vacio la cookie lugares_visitados[2]
-                                                if(empty($_COOKIE['lugares_visitados'][2]))
-                                                {
-                                                    // Guardo la cookie lugares_visitados[0] en una auxiliar
-                                                    $auxiliar1=$_COOKIE['lugares_visitados'][0];
-                                                    $auxiliar2=$_COOKIE['lugares_visitados'][1];
+                                                // Guardo la cookie lugares_visitados[0] en una auxiliar
+                                                $auxiliar1 = $_COOKIE['lugares_visitados'][0];
+                                                $auxiliar2 = $_COOKIE['lugares_visitados'][1];
 
-                                                    // Creo una cookie lugares_visitados[2] con el valor del auxiliar
-                                                    setcookie('lugares_visitados[2]', $auxiliar2 , time()+3600);
+                                                // Creo una cookie lugares_visitados[0] con el lugar visitado
+                                                setcookie('lugares_visitados[0]', $lugarvisitado, time() + 3600);
 
-                                                    // Creo una cookie lugares_visitados[1] con el valor del auxiliar
-                                                    setcookie('lugares_visitados[1]', $auxiliar1 , time()+3600);
+                                                // Creo una cookie lugares_visitados[1] con el valor del auxiliar1
+                                                setcookie('lugares_visitados[1]', $auxiliar1, time() + 3600);
 
-                                                    // Creo una cookie lugares_visitados[0] con el lugar visitado
-                                                    setcookie('lugares_visitados[0]', $lugarvisitado , time()+3600);
-                                                }
-                                                else // Si esta rellena lugares_visitados[2]
-                                                {
-                                                    // Guardo la cookie lugares_visitados[0] en una auxiliar
-                                                    $auxiliar1=$_COOKIE['lugares_visitados'][0];
-                                                    $auxiliar2=$_COOKIE['lugares_visitados'][1];
+                                                // Creo una cookie lugares_visitados[2] con el valor del auxiliar2
+                                                setcookie('lugares_visitados[2]', $auxiliar2, time() + 3600);
 
-                                                    // Creo una cookie lugares_visitados[0] con el lugar visitado
-                                                    setcookie('lugares_visitados[0]', $lugarvisitado , time()+3600);
-
-                                                    // Creo una cookie lugares_visitados[1] con el valor del auxiliar1
-                                                    setcookie('lugares_visitados[1]', $auxiliar1 , time()+3600);
-
-                                                    // Creo una cookie lugares_visitados[2] con el valor del auxiliar2
-                                                    setcookie('lugares_visitados[2]', $auxiliar2 , time()+3600);
-
-                                                }
                                             }
                                         }
                                     }
-                                    else // Si no se encuentra ese lugar no existe o otros problemas.
-                                    {
-                                        echo '<p>Error - Hubo un error fatal el lugar no existe</p>';
-                                    }
-
-                                }
-                                else // Si no devuelve filas, no se pudo insertar/ hacer esa visita.
-                                {
-                                    echo '<p>Eror al visitar el lugar</p>';
                                 }
                             }
                         }

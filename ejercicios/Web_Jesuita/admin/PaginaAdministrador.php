@@ -184,7 +184,7 @@
                             {
                                 if(!isset($_GET["opcionusuario"]))
                                 {
-                                    echo '<h2>Gestion de Usuario</h2>';
+                                    echo '<h2>Gestion de Maquina</h2>';
                                         echo '<div class="opciones">';
                                             echo '<ul>';
                                                 echo '<li><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=agregar">Agregar</a></li>';
@@ -200,7 +200,7 @@
 /*--- Usuarios Agregar ---------------------------------------------------------------------------*/
                                     if($_GET["opcionusuario"]=="agregar")
                                     {
-                                        echo '<h2>Agregar Usuario</h2>';
+                                        echo '<h2>Agregar Maquina</h2>';
 
                                         if(!isset($_POST["Agregar"]))
                                         {
@@ -225,10 +225,10 @@
                                             {
                                                 // Si no esta vacia entra
                                                 // Se guarda la variable enviada por el formulario entre comilla en otra variable.
-                                                $ip = "'".$_POST["ip"]."'";
+                                                $ip = $_POST["ip"];
 
                                                 // Consulta para comprobar que existe ese nombre
-                                                $consulta = "SELECT * FROM maquina WHERE ip=".$ip.";";
+                                                $consulta = 'SELECT * FROM maquina WHERE ip="'.$ip.'";';
                                                 //print_r($consulta);
 
                                                 $objeto->realizarConsultas($consulta);
@@ -241,18 +241,20 @@
                                                 }
                                                 else
                                                 {
-                                                    // Si ese lugar no existe
+                                                    // Guardar el password encriptado.
+                                                    $hashed_password = password_hash("12345", PASSWORD_DEFAULT);
+                                                    //echo $hashed_password;
 
-                                                    // Consulta para insertar ese lugar.
-                                                    $consulta = "INSERT INTO maquina (ip, password) values (".$ip.", '123456');";
+                                                    // Consulta para insertar esa maquina.
+                                                    $consulta = 'INSERT INTO maquina (ip, password) values ("'.$ip.'", "'.$hashed_password.'");';
+                                                    //print_r($consulta);
 
-                                                    // print_r($consulta);
                                                     $objeto->realizarConsultas($consulta);
 
                                                     // Comprueba que se inserto bien
                                                     if($objeto->comprobar()>0)
                                                     {
-                                                        echo '<p class="correctoup">Se introduzco correctamente el usuario '.$ip.'</p>';
+                                                        echo '<p class="correctoup">Se introduzco correctamente la maquina '.$ip.'</p>';
                                                     }
                                                     else
                                                     {
@@ -269,7 +271,7 @@
                                     {
                                         if($_GET["opcionusuario"]=="modificar")
                                         {
-                                            echo '<h2>Modificar Usuario</h2>';
+                                            echo '<h2>Modificar Maquina</h2>';
 
                                             if(!isset($_POST["Modificar"]))
                                             {
