@@ -3,11 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <title>Asignar Lugar & Jesuita</title>
-        <link rel="stylesheet" href="Nueva carpeta/style.css">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id="general">
-            <img src="Nueva carpeta/imagenes/logotipo.png">
+            <img src="imagenes/logotipo.png">
 
             <h3>Asignar Lugar y Jesuita</h3>
             <?php
@@ -109,7 +109,7 @@
                             else //Se seleciono alguno de ambos
                             {
                                 // Si estan rellenos ambos
-                                if((!empty($_POST["lugar"])) AND (!empty($_POST["jesuita"])))
+                                if(($_POST["lugar"] != 'no') AND ($_POST["jesuita"] != 'no'))
                                 {
                                     // Actualizar el lugar y jesuita de esa maquina
                                     $consulta = "UPDATE maquina SET lugar=".$_POST["lugar"].", jesuita=".$_POST["jesuita"]." WHERE ip = '".$_POST["nombremaquina"]."'";
@@ -126,40 +126,42 @@
                                 }
                                 else // Si esta relleno uno de ambos
                                 {
-                                    echo 'hola';
                                     // Si solo se rellena lugar
-                                    if(!empty($_POST["lugar"]))
+                                    if(!empty($_POST["lugar"]) AND ($_POST["jesuita"] == 'no'))
                                     {
                                         // Actualizar el lugar y jesuita de esa maquina
-                                        $consulta = "UPDATE maquina SET lugar='".$_POST["lugar"]."' WHERE ip = '".$_POST["nombremaquina"]."'";
+                                        $consulta = "UPDATE maquina SET lugar=".$_POST["lugar"]." WHERE ip = '".$_POST["nombremaquina"]."'";
                                         //print_r($consulta);
                                         $objeto->realizarConsultas($consulta);
 
                                         // Se actualizo el lugar y jesuita correctamente.
                                         if ($objeto->comprobar()>0)
                                         {
-                                            echo '<p>Se asigno correctamente el lugar a la maquina</p>';
+                                            echo '<p>Se asigno correctamente el nuevo lugar a la maquina</p>';
 
                                             echo '</br><a href="asignar-lugar-jesuita.php" class="boton"> Volver </a></br>';
                                         }
                                     }
                                     else
                                     {
-                                        // Actualizar el lugar y jesuita de esa maquina
-                                        $consulta = "UPDATE maquina SET jesuita='".$_POST["jesuita"]."' WHERE ip = '".$_POST["nombremaquina"]."'";
-                                        //print_r($consulta);
-                                        $objeto->realizarConsultas($consulta);
-
-                                        // Se actualizo el lugar y jesuita correctamente.
-                                        if ($objeto->comprobar()>0)
+                                        if(!empty($_POST["jesuita"]) AND ($_POST["lugar"] == 'no'))
                                         {
-                                            echo '<p>Se asigno correctamente el jesuita a la maquina</p>';
+                                            // Actualizar el lugar y jesuita de esa maquina
+                                            $consulta = "UPDATE maquina SET jesuita=".$_POST["jesuita"]." WHERE ip = '".$_POST["nombremaquina"]."'";
+                                            //print_r($consulta);
+                                            $objeto->realizarConsultas($consulta);
 
-                                            echo '</br><a href="asignar-lugar-jesuita.php" class="boton"> Volver </a></br>';
+                                            // Se actualizo el lugar y jesuita correctamente.
+                                            if ($objeto->comprobar()>0)
+                                            {
+                                                echo '<p>Se asigno correctamente el nuevo jesuita a la maquina</p>';
+
+                                                echo '</br><a href="asignar-lugar-jesuita.php" class="boton"> Volver </a></br>';
+                                            }
+
                                         }
                                     }
                                 }
-                                echo 'hola1';
                             }
                         }
                         else // En caso que nod evuelva filas, por lo tanto no existe.

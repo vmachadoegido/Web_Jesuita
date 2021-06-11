@@ -17,6 +17,7 @@
                 // Crear el objeto de la operaciones.
                 $objeto=new operaciones();
 
+            //$_SESSION["usuario"] = 'admin';
 
 /* Navegador --------------------------------------------------------------------------------------------------*/
                 echo '<nav>';
@@ -42,8 +43,28 @@
                             if($_SESSION["usuario"] == 'admin')
                             {
                                 echo '<li><a href="#">Total</a></li>';
-                                echo '<li><a href="#">Usuario</a></li>';
-                                echo '<li><a href="#">Lugares</a></li>';
+                                echo '<li><a href="#">Lugares</a>';
+                                    echo '<ul>';
+                                        echo '<li><a href="#">Listar</a></li>';
+                                        echo '<li><a href="./admin/PaginaAdministrador.php?opcion=lugar&opcionlugar=agregar">Agregar</a></li>';
+                                    echo '</ul>';
+                                echo '</li>';
+
+                                echo '<li><a href="#">Jesuita</a>';
+                                    echo '<ul>';
+                                        echo '<li><a href="#">Listar</a></li>';
+                                        echo '<li><a href="alta_jesuita.php">Agregar</a></li>';
+                                    echo '</ul>';
+                                echo '</li>';
+
+                                echo '<li><a href="#">Maquinas</a>';
+                                    echo '<ul>';
+                                        echo '<li><a href="listarmaquinas.php">Listar</a></li>';
+                                        echo '<li><a href="./admin/PaginaAdministrador.php?opcion=usuario&opcionusuario=agregar">Agregar</a></li>';
+                                        echo '<li><a href="asignar-lugar-jesuita.php">Asignar</a></li>';
+                                    echo '</ul>';
+                                echo '</li>';
+
                             }
                             // Si el usuario es admin o usuario mostra el boton salir
                             if( ($_SESSION["usuario"] == 'admin') or ($_SESSION["usuario"] == 'usuario'))
@@ -72,10 +93,14 @@
                             // Visualiza el resultado de las filas devueltas.
                             while($fila=$objeto->extraerFilas())
                             {
-                                echo '<tr>';
-                                    echo '<td>'.$fila["lugar"].'</td>';
-                                    echo '<td class="centrarvisita">'.$fila["contador"].'</td>';
-                                echo '</tr>';
+                                if(!empty($fila["lugar"]))
+                                {
+                                    echo '<tr>';
+                                        echo '<td>'.$fila["lugar"].'</td>';
+                                        echo '<td class="centrarvisita">'.$fila["contador"].'</td>';
+                                    echo '</tr>';
+                                }
+
                             }
                         echo '</tr>';
                     echo '</table>';
@@ -104,7 +129,10 @@
                             // Va mostrando los jesuitas con las filas.
                             while($fila=$objeto->extraerFilas())
                             {
-                                echo '<tr><td>'.$fila["jesuita"].'</td> <td class="centrarvisita">'.$fila["visitas"].'</td></tr>';
+                                if(!empty($fila["jesuita"]))
+                                {
+                                    echo '<tr><td>' . $fila["jesuita"] . '</td> <td class="centrarvisita">' . $fila["visitas"] . '</td></tr>';
+                                }
                             }
                         echo '</tr>';
                     echo '</table>';

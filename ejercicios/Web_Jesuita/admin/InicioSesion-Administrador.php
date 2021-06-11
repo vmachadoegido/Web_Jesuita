@@ -12,8 +12,8 @@
                 {
                     echo '<form action="#" METHOD="POST">';
                         echo '<h2>Inicio de Sesion</h2>';
-                        echo '<input type="text" placeholder="Usuario" name="usuario">';
-                        echo '<input type="password" placeholder="Password" name="password">';
+                        echo '<input type="text" placeholder="Usuario" name="usuario" required>';
+                        echo '<input type="password" placeholder="Password" name="password" required>';
                         echo '<input type="submit" value="Enviar" name="Enviar">';
                     echo '</form>';
                 }
@@ -39,13 +39,13 @@
                         $fila = $objeto->extraerFilas();
 
                         // Guardar el nombreAdministrador en la sesion
-                        $_SESSION["idUsuario"]=$fila["nombreAdministrador"];
-                        $_SESSION["tipo"] = 'admin';
+                        $_SESSION["idUsuario"] = $fila["nombreAdministrador"];
+                        $_SESSION["usuario"]  = 'admin';
 
                         // echo 'correcto';
 
                         // Lo lleva a la pagina de los rankins
-                        header('Location: PaginaAdministrador.php');
+                        header('Location: ../0-rankingvisitas.php');
                     }
                     else
                     {

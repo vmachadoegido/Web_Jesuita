@@ -35,6 +35,7 @@
                         echo '<input type="submit" name="Enviar" value="Enviar" />';
                     echo '</form>';
 
+                    echo '<button class="volver"><a href="0-rankingvisitas.php">Volver</a></button>';
                 }
                 else
                 {

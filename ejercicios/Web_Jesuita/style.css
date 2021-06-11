@@ -21,7 +21,7 @@ html{
 
 table{
     border: 1px solid black;
-    text-align: left;
+    text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
@@ -43,7 +43,6 @@ td{
     padding: 0px 5px;
 }
 
-
 a
 {
     text-decoration: none;
@@ -62,8 +61,6 @@ img{
     border-radius: 5px;
     padding: 0px 5px;
 }
-
-
 
 #contenedor
 {
@@ -113,7 +110,6 @@ nav
 {
     background-color: #3dd5f3;
     width: 900px;
-    /*text-align: left;*/
 }
 
 /* Poner a los ul del nav como cajas flexibles*/
@@ -131,6 +127,7 @@ nav ul li
     margin: 10px;
     text-align: center;
     border: 1px solid white;
+    position:relative;
 }
 
 /* Propiedades de los enlaces de la lista del navegador en general*/
@@ -139,6 +136,30 @@ nav ul li a{
     padding: 7px 5px;
     display: block;
     text-align: center;
+}
+
+/*Propiedad del ul ul del nav*/
+/*Sirve para ocultar la sublista y posicionarla bien*/
+nav ul ul
+{
+    display:none; /* Sirve para ocultar la sublista*/
+    position:absolute; /* Para que no se expanda junto al nav*/
+    background-color: #3dd5f3;
+}
+
+/*Propiedad de los li de la sublista*/
+nav ul ul li
+{
+    margin-top: 10px;
+    padding: 0 5px;
+    float: none;
+    width: 115px
+}
+
+/*Propiedad la cual al ponerte encima de la lista, que tenga subconsulta muestre la subconsulta*/
+nav ul li:hover > ul
+{
+    display:block;
 }
 
 
@@ -166,89 +187,25 @@ nav ul li a{
     border: 0;
 }
 
-
-/*-------------------------------------------------------------------*/
-
-/* Entre las anchuras 1440px y 1024px*/
-/*
-    Se reducira el tamaño de la letra a 18px
-    El color de fondo del navegador cambiara.
-*/
-
-
-@media (max-width: 1440px) and (min-width: 1024px)
+.volver
 {
-    html{
-        font-size: 18px;
-    }
-
-    nav {
-        background-color: #4d4d4c;
-    }
+    margin: 20px 200px;
+    background: #2f2f2f;
+    color: white;
+    border-radius: 20px;
+    width: 100px;
+    font-size: 15px;
+}
+.volver a
+{
+    color: white;
 }
 
-
-/* Entre las anchuras 1440px y 1024px*/
-/*
-    Se reducira el tamaño de la letra a 18px
-    El color de fondo del navegador cambiara.
-*/
-
-/* Al llegar 1024px*/
-/*
-    Se reduce el tamaño de la letra a 15px,
-    Se cambia el fondo de color del nav,
-    la lista perfil, no se expande,
-    se centra los items del navegador.
-*/
-@media (max-width: 1024px)
+#formulariopreguntar input[type="radio"]
 {
-    html{
-        font-size: 15px;
-    }
-
-    #general{
-        width: 760px;
-    }
-
-    nav {
-        width: 760px;
-        background-color: #eeeeee;
-    }
-
-    #navprofesor ul {
-        justify-content: center; /* Centrar los items */
-    }
-
-}
-
-/* Al llegar al tamaño 568px*/
-/*
-    Se reduce el tamaño de letra a 15px,
-    el htm reduce el tamaño a 500px,
-    el nav se reduce a 500px,
-    y el navegador de los items se colocan de forma de columna.
-*/
-
-
-@media (max-width: 768px)
-{
-    html{
-        font-size: 15px;
-    }
-
-    #general{
-        width: 500px;
-    }
-
-    nav{
-        width: 500px;
-    }
-
-    nav ul {
-        width: 500px;
-        flex-direction: column;
-        justify-items: center;
-        align-items: center;
-    }
+    display: inline-block;
+    width: 13px;
+    background-color: black;
+    padding: 0;
+    margin: 10px;
 }

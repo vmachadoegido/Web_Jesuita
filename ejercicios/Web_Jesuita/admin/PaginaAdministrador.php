@@ -16,7 +16,7 @@
                         echo '<ul>';
                             echo '<li><a href="PaginaAdministrador.php?opcion=lugar">Lugares</a></li>';
                             echo '<li><a href="PaginaAdministrador.php?opcion=jesuita">Jesuita</a></li>';
-                            echo '<li><a href="PaginaAdministrador.php?opcion=usuario">Usuarios</a></li>';
+                            echo '<li><a href="PaginaAdministrador.php?opcion=usuario">Maquinas</a></li>';
                             echo '<li><a href="PaginaAdministrador.php?opcion=cerrarsesion">Cerrar Sesion</a></li>';
                         echo '</ul>';
                     echo '<div>';
@@ -59,7 +59,7 @@
                                             echo '<input type="submit" value="Agregar" name="Agregar">';
                                         echo '</form>';
 
-                                        echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=lugar">Volver</a></button>';
+                                        echo '<button class="volver"><a href="../0-rankingvisitas.php">Volver</a></button>';
                                     }
                                     else
                                     {   // Cuando se envia el formulario
@@ -205,12 +205,13 @@
                                         if(!isset($_POST["Agregar"]))
                                         {
                                             echo '<form action="#" METHOD="POST">';
-                                                echo '<input type="text" placeholder="Ip de tu Maquina *" name="ip">';
+                                                echo '<input type="text" placeholder="Ip de tu Maquina" name="ip" required>';
+                                                echo '<input type="text" placeholder="Password" value="12345" name="password" required>';
 
                                                 echo '<input type="submit" value="Agregar" name="Agregar">';
                                             echo '</form>';
 
-                                            echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
+                                            echo '<button class="volver"><a href="../0-rankingvisitas.php">Volver</a></button>';
                                         }
                                         else
                                         {   // Cuando se envia el formulario
@@ -241,8 +242,10 @@
                                                 }
                                                 else
                                                 {
+                                                    $password = $_POST["password"];
+
                                                     // Guardar el password encriptado.
-                                                    $hashed_password = password_hash("12345", PASSWORD_DEFAULT);
+                                                    $hashed_password = password_hash("$password", PASSWORD_DEFAULT);
                                                     //echo $hashed_password;
 
                                                     // Consulta para insertar esa maquina.
@@ -273,117 +276,20 @@
                                         {
                                             echo '<h2>Modificar Maquina</h2>';
 
-                                            if(!isset($_POST["Modificar"]))
-                                            {
-                                                echo '<form action="#" METHOD="POST">';
-                                                echo '<input type="text" placeholder="Ip de tu Maquina *" name="ip">';
-                                                echo '<input type="text" placeholder="Ip de tu Maquina Nueva" name="ipnew">';
-                                                echo '<input type="text" placeholder="Nombre del Alumno" name="nombreAlumno">';
-                                                echo '<input type="password" placeholder="password" name="password">';
+                                                setcookie('valoresformulario[0]', '' , time()-60);
+                                                setcookie('valoresformulario[1]', '' , time()-60);
+                                                setcookie('valoresformulario[2]', '' , time()-60);
 
-                                                $consulta = "SELECT * FROM lugar";
-
-                                                $objeto->realizarConsultas($consulta);
-
-                                                if ($objeto->comprobar()>0)
+                                                if(!isset($_POST["Enviar"]))
                                                 {
-                                                    echo '<select class="centrar" name="lugar">';
-                                                    while ($fila = $objeto->extraerFilas())
-                                                    {
-                                                        echo '<option value="'.$fila["idLugar"].'">'.$fila["nombreLugar"].'</option>';
-                                                    }
-                                                    echo '</select>';
-                                                }
-                                                else
-                                                {
-                                                    echo '<p class="centrar"> Aun no hay lugares </p>';
+                                                    echo '<form action="modificar_maquina.php" METHOD="POST">';
+                                                        echo '<label>Ip de la Maquina a modificar</label>';
+                                                        echo '<input type="text" placeholder="Ip de la Maquina a modificar" name="ip">';
+                                                        echo '<input type="submit" value="Enviar">';
+                                                    echo '</form>';
                                                 }
 
-                                                $consulta = "SELECT * FROM jesuita";
-
-                                                $objeto->realizarConsultas($consulta);
-
-                                                if ($objeto->comprobar()>0)
-                                                {
-                                                    echo '<select name="jesuita">';
-                                                    while ($fila = $objeto->extraerFilas())
-                                                    {
-                                                        echo '<option value="'.$fila["idJesuita"].'">'.$fila["nombreJesuita"].'</option>';
-                                                    }
-                                                    echo '</select>';
-                                                }
-                                                else
-                                                {
-                                                    echo '<p class="centrar"> Aun no hay lugares </p>';
-                                                }
-
-                                                echo '<input type="submit" value="Modificar" name="Modificar">';
-                                                echo '</form>';
-
-                                                echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
-                                            }
-                                            else
-                                            {
-                                                if(empty($_POST["ip"]))
-                                                {
-                                                    echo '<p class="errorup">Error - Campo Obligatorio Vacio</p>';
-                                                    echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario&opcionusuario=modificar">Volver</a></button>';
-                                                }
-                                                else
-                                                {
-                                                    // nombreAlumno, password, idLugar, idJesuita
-                                                    // Relleno la Ip nueva
-                                                    if(!empty($_POST["ipnew"]))
-                                                    {
-                                                        // Si relleno el password
-                                                        if(!empty($_POST["password"]))
-                                                        {
-                                                            // Si rellena la idLugar
-                                                            if(!empty($_POST["lugar"]))
-                                                            {
-                                                                // Si rellena el idJesuita
-                                                                if(!empty($_POST["jesuita"]))
-                                                                {
-                                                                    $consulta = "UPDATE maquina SET ip='".$_POST["ipnew"]."', nombreAlumno='".$_POST["nombreAlumno"]."', password='".$_POST["password"]."', primera_vez=0, lugar=".$_POST["lugar"].", jesuita=".$_POST["jesuita"]." WHERE ip='".$_POST["ip"]."';";
-
-                                                                    // print_r($consulta);
-
-                                                                    $objeto->realizarConsultas($consulta);
-
-                                                                    if($objeto->comprobar()>0)
-                                                                    {
-                                                                        echo '<p class="correctoup">Se cambio todos los datos correctamente</p>';
-                                                                        echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        echo '<p class="errorup">Error - Hubo un problema </p>';
-                                                                        echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
-                                                                    }
-
-                                                                }
-                                                                else // Si no rellena la idLugar
-                                                                {
-                                                                    echo 'a';
-                                                                }
-                                                            }
-                                                            else // Si no rellena el password
-                                                            {
-                                                                echo 'ab';
-                                                            }
-
-                                                        }
-                                                        else
-                                                        {    // SI no rellena el password
-                                                            if(!empty($_POST["idLugar"]))
-                                                            {
-                                                                echo 'ac';
-
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            echo '<button class="volver"><a href="PaginaAdministrador.php?opcion=usuario">Volver</a></button>';
                                         }
                                     }
                                 }

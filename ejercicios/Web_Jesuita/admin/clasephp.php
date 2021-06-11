@@ -18,6 +18,7 @@
         {
             return $this->resultado->num_rows;
         }
+
         function comprobar(){
             return $this->mysqli->affected_rows;
         }

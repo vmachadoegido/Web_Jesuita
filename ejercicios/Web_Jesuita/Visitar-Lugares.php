@@ -18,9 +18,8 @@
                 session_start();
 
                 // Pruebas, finje ser la maquina 1
-                $_SESSION["jesuita"] = '1';
-                echo $_SESSION["jesuita"];
-
+                $_SESSION["jesuita"] = '2';
+                //echo $_SESSION["jesuita"];
 
                 // Hasta que no se envia el lugar
                 if(!isset($_POST["visitar"]))

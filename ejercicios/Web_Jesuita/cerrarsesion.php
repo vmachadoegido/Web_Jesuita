@@ -1,6 +1,10 @@
 <?php
+//Iniciar sesion
+session_start();
+
 // Cerrar sesion
 session_destroy();
+
 // Lo envia a la pagina inicio-sesion
-header('Location: inicio-sesion.php');
+header('Location: 0-rankingvisitas.php');
 

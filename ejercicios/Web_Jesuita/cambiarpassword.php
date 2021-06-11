@@ -37,37 +37,45 @@
                     // COmprobar los valores de las password
                     //echo 'password1: '.$_POST["password1"].' password2: '.$_POST["password2"];
 
-                    // Si son iguales los password
-                    if($_POST["password1"] == $_POST["password2"])
+                    // Si esta vacia $_POST["password1"] o $_POST["password2"]
+                    if ((empty($_POST["password1"])) OR ($_POST["password2"]))
                     {
-                        // Guardo el post en una variable
-                        $passwordfinal =  $_POST["password1"];
-                        // Encripta el password
-                        $hashed_password = password_hash("$passwordfinal", PASSWORD_DEFAULT);
-
-                        // Consulta para actualizar el password y la primera_vez
-                        $consultar = 'UPDATE maquina SET password="'.$hashed_password.'", primera_vez=1 WHERE ip="'.$_SESSION["ip"].'";';
-                        //print_r($consultar);
-                        $objeto->realizarConsultas($consultar);
-
-                        // Si devuelve fila, se hizo el cambio
-                        if($objeto->comprobar($consultar)>0)
-                        {
-                            // Le lleva a la pagina de rankings
-                            header('Location: 0-rankingvisitas.php');
-                        }
-                        else
-                        {
-                            echo '<p>Error Inesperado vuelva a intentarlo</p>';
-                            echo '</br><a href="cambiarpassword.php" class="boton"> Volver </a></br>';
-                        }
-
+                        echo'<p>No se puede quedar vacio ningun cambio</p>';
                     }
                     else
                     {
-                        echo '<p>No coincide las password</p>';
+                        // Si son iguales los password
+                        if($_POST["password1"] == $_POST["password2"])
+                        {
+                            // Guardo el post en una variable
+                            $passwordfinal =  $_POST["password1"];
+                            // Encripta el password
+                            $hashed_password = password_hash("$passwordfinal", PASSWORD_DEFAULT);
 
-                        echo '</br><a href="cambiarpassword.php" class="boton"> Volver </a></br>';
+                            // Consulta para actualizar el password y la primera_vez
+                            $consultar = 'UPDATE maquina SET password="'.$hashed_password.'", primera_vez=1 WHERE ip="'.$_SESSION["ip"].'";';
+                            //print_r($consultar);
+                            $objeto->realizarConsultas($consultar);
+
+                            // Si devuelve fila, se hizo el cambio
+                            if($objeto->comprobar($consultar)>0)
+                            {
+                                // Le lleva a la pagina de rankings
+                                header('Location: 0-rankingvisitas.php');
+                            }
+                            else
+                            {
+                                echo '<p>Error Inesperado vuelva a intentarlo</p>';
+                                echo '</br><a href="cambiarpassword.php" class="boton"> Volver </a></br>';
+                            }
+
+                        }
+                        else
+                        {
+                            echo '<p>No coincide las password</p>';
+
+                            echo '</br><a href="cambiarpassword.php" class="boton"> Volver </a></br>';
+                        }
                     }
                 }
             echo '</div>';
